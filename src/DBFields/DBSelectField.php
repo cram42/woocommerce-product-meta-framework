@@ -9,7 +9,6 @@ abstract class DBSelectField extends SelectField
     protected string $dblist_class = '';
     protected string $order_by = 'id';
     protected bool $order_desc = false;
-    protected bool $allow_blank = true;
 
     protected function getDBList()
     {
