@@ -9,6 +9,7 @@ abstract class DBSelectField extends SelectField
     protected string $dblist_class = '';
     protected string $order_by = 'id';
     protected bool $order_desc = false;
+    protected bool $allow_blank = true;
 
     protected function getDBList()
     {
@@ -23,7 +24,13 @@ abstract class DBSelectField extends SelectField
 
     protected function getOptions() {
         if (count($this->options) == 0) {
-            $this->options = $this->getDBList()->getItems($this->order_by, $this->order_desc);
+            if ($this->allow_blank) {
+                $this->options[''] = '';
+            }
+            $items = $this->getDBList()->getItems($this->order_by, $this->order_desc);
+            foreach ($items as $key => $value) {
+                $this->options[$key] = $value;
+            }
         }
         return $this->options;
     }
