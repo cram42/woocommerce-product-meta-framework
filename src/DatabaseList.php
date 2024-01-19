@@ -12,7 +12,7 @@ abstract class DatabaseList extends WPF\Singleton implements
 {
     protected string $id;
     protected string $table_name;
-    protected $default_options = array();
+    protected $default_items = array();
 
     protected $items;
 
@@ -53,8 +53,8 @@ abstract class DatabaseList extends WPF\Singleton implements
         global $wpdb;
         error_log("DatabaseList({$this->getId()})::populateTable()");
         
-        foreach ($this->default_options as $option) {
-            $wpdb->replace($this->getTableName(), $option);
+        foreach ($this->default_items as $item) {
+            $wpdb->replace($this->getTableName(), $item);
         }
     }
 
