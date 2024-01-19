@@ -4,8 +4,11 @@ namespace WCProductMetaFramework;
 
 abstract class DBSelectField extends SelectField
 {
-    protected string $dblist_class = '';
     protected mixed $dblist = null;
+
+    protected string $dblist_class = '';
+    protected string $order_by = 'id';
+    protected bool $order_desc = false;
 
     protected function getDBList()
     {
@@ -20,7 +23,7 @@ abstract class DBSelectField extends SelectField
 
     protected function getOptions() {
         if (count($this->options) == 0) {
-            $this->options = $this->getDBList()->getItems();
+            $this->options = $this->getDBList()->getItems($this->order_by, $this->order_desc);
         }
         return $this->options;
     }

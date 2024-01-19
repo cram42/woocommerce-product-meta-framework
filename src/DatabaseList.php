@@ -10,6 +10,8 @@ abstract class DatabaseList extends WPF\Singleton implements
     WPF\IOnPluginDisable,
     WPF\IOnPluginUninstall
 {
+    protected const VALID_ORDER_BY = array('id', 'value', 'label');
+
     protected string $id;
     protected string $table_name;
     protected $default_items = array();
@@ -60,12 +62,17 @@ abstract class DatabaseList extends WPF\Singleton implements
 
     #region Public Methods
 
-    public function getItems()
+    public function getItems($order_by = null, $order_desc = false)
     {
         error_log("DatabaseList({$this->getId()})::getItems()");
+        
+        $order_by = in_array($order_by, static::VALID_ORDER_BY) 
+            ? $order_by 
+            : static::VALID_ORDER_BY[0];
+
         if ($this->items == null) {
             global $wpdb;
-            $query = sprintf("SELECT value, label FROM %s;", $this->getTableName());
+            $query = sprintf("SELECT value, label FROM %s ORDER BY %s %s;", $this->getTableName(), $order_by, ($order_desc) ? 'DESC' : '');
             $results = $wpdb->get_results($query);
             
             $this->items = array();
