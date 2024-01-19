@@ -28,7 +28,7 @@ abstract class DatabaseList extends WPF\DBTable
         return $this->id;
     }
 
-    public function getItems($order_by = null, $order_desc = false)
+    public function getItems(string $order_by = '', $order_desc = false)
     {
         error_log("DatabaseList({$this->getId()})::getItems()");
         
@@ -37,12 +37,15 @@ abstract class DatabaseList extends WPF\DBTable
             : static::VALID_ORDER_BY[0];
 
         if ($this->items == null) {
-            $results = $this->readAll();
+            $results = $this->readAll($order_by, $order_desc);
             $this->items = array();
             foreach ($results as $result) {
-                $this->items[$result->value] = $result->label;
+                $value = $result['value'];
+                $label = $result['label'];
+                $this->items[$value] = $label;
             }
         }
         return $this->items;
     }
+
 }
